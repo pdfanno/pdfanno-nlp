@@ -10,13 +10,22 @@ class CharScript(Enum):  # superscript, subscript
 
 
 class Char:
-    def __init__(self, value: str, bbox: Rect, script=CharScript.NONE):
+    def __init__(self, value: str, bbox: Rect, font_size: int, script=CharScript.NONE):
         self.value: str = value
         self.bbox: Rect = bbox
+        self.font_size: int = font_size
         self.script: CharScript = script
 
     def __str__(self):
         return f"{self.value}"
+
+    def html_text(self):
+        if self.script == CharScript.SUB:
+            return f"<sub>{self.value}</sub>"
+        elif self.script == CharScript.SUPER:
+            return f"<sup>{self.value}</sup>"
+        else:
+            return self.value
 
 
 class Word:
@@ -34,8 +43,27 @@ class Word:
     def __repr__(self):
         return self.value()
 
-    def value(self,):
+    def text(self):
         return "".join(c.value for c in self.chars)
+
+    def set_scripts(self):
+        """
+        Set CharScript for each char
+        """
+        # TODO: vertical case
+        chars = self.chars
+        base = chars[0]
+        for c in chars:
+            if c.font_size > base.font_size:
+                base = c
+        for c in chars:
+            if c.font_size < base.font_size * 0.8:
+                if c.bbox.center().y1 < base.bbox.center().y1:
+                    c.script = CharScript.SUPER
+                else:
+                    c.script = CharScript.SUB
+            else:
+                c.script = CharScript.NONE
 
     @staticmethod
     def from_chars(chars: list[Char]):

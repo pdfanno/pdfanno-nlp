@@ -42,6 +42,7 @@ class PDF:
 
             text_dict = page_dict["text"]
             values = text_dict["values"]
+            font_sizes = text_dict["fontsizes"]
             x1s = text_dict["x1s"]
             y1s = text_dict["y1s"]
             x2s = text_dict["x2s"]
@@ -51,10 +52,12 @@ class PDF:
             for k in range(len(values)):
                 bbox = Rect(x1s[k], y1s[k], x2s[k], y2s[k])
                 bbox = bbox.scale(1 / width, 1 / height)
-                char = Char(values[k], bbox)
+                char = Char(values[k], bbox, font_sizes[k])
                 chars.append(char)
             page.chars = chars
             page.words = Word.tokenize(chars)
+            for w in page.words:
+                w.set_scripts()
         return pdf
 
 
