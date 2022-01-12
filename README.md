@@ -1,25 +1,18 @@
 # pdfanno-nlp
 
 ## Install
-* Python 3.9以上
-* [pytorch](https://pytorch.org/) 1.10以上
+* Python 3.9 or higher
 ```
-$ pip install cloudpickle pytorch-crf
+$ pip install ./pdfanno-nlp
+```
+If you modify the code:
+```
+$ pip install -e ./pdfanno-nlp
 ```
 
-## Training
-`train.py`のconfig情報を環境に合わせて設定
+## Load PDF
 ```
-$ cd src
-$ python train.py
-```
-`data_dir`には，`.pdf`, `.pdf.txt.gz`, `.anno`ファイルが必要
+from pdfannonlp import PDF, Char, Word
 
-## Testing
-`test.py`のconfig情報を環境に合わせて設定
+pdf = PDF.load_text("xxx.pdf.json.gz")
 ```
-$ cd src
-$ python test.py
-```
-`data_dir`には，`.pdf`, `.pdf.txt.gz`ファイルが必要．  
-annoファイルが生成される．
